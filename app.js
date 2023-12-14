@@ -93,7 +93,22 @@ const createUser = async (req, res) => {
 app.get("/api/getusers", async (req, res) => {
   try {
     const users = await User.find();
-    res.send(users);
+    res.status(200).json({
+      msg: "Usuario encontrado",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/oneuser/:mail", async (req, res) => {
+  try {
+    const _mail = req.params.mail;
+    const oneuser = await User.findOne({ mail: _mail });
+    res.status(200).json({
+      msg: "usuario encontrado",
+      resultado: oneuser,
+    });
   } catch (error) {
     console.log(error);
   }
