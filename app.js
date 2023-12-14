@@ -101,6 +101,32 @@ app.get("/api/getusers", async (req, res) => {
   }
 });
 
+app.patch("/api/updateuser", async (req, res) => {
+  try {
+    const { _id, _username, _mail, _password, _role, _domicilio, _telefono } =
+      req.body;
+    return User.updateOne(
+      { _id: _id },
+      {
+        $set: {
+          username: _username,
+          mail: _mail,
+          password: _password,
+          role: _role,
+          domicilio: _domicilio,
+          telefono: _telefono,
+        },
+      }
+    ).then((resultado) => {
+      res.status(200).json({
+        msg: "usuario actualizado",
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.get("/api/oneuser/:mail", async (req, res) => {
   try {
     const _mail = req.params.mail;
@@ -108,6 +134,19 @@ app.get("/api/oneuser/:mail", async (req, res) => {
     res.status(200).json({
       msg: "usuario encontrado",
       resultado: oneuser,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.delete("/api/deleteuser/:id", async (req, res) => {
+  try {
+    const _id = req.params.id; // .id es de la url de la linea 117
+    const deleteuser = await User.findOneAndDelete({ _id: _id });
+    res.status(200).json({
+      msg: "Borrado",
+      resultado: deleteuser,
     });
   } catch (error) {
     console.log(error);
